@@ -1179,6 +1179,18 @@ public abstract class Character extends Observable implements Cloneable {
     public boolean hasBreasts() {
         return body.get("breasts").size() > 0;
     }
+    /*Returns a boolean indicating whether the character has a given body part
+    at size >0
+    
+    @param   part    the body part to search for
+    @return          boolean indicator of presence
+    @see             Body.has(String part)
+    
+    This seems a much more generalisable way of doing it than the above?  
+    TRQ*/
+    public boolean has(String part){
+        return body.has(part);
+    }
 
     public int countFeats() {
         int count = 0;

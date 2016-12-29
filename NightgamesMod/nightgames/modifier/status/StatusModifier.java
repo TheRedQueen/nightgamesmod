@@ -31,6 +31,7 @@ public class StatusModifier implements ModifierCategory<StatusModifier>, Modifie
         }
     }
 
+    @Override
     public StatusModifier combine(StatusModifier next) {
         StatusModifier first = this;
         return new StatusModifier() {

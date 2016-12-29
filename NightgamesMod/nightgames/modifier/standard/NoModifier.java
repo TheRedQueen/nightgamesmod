@@ -28,5 +28,14 @@ public class NoModifier extends BaseModifier {
     public String acceptance() {
         return "";
     }
-
+    
+    /*override so this will always trigger
+    
+    @return    true
+    @see       Modifier.isApplicable()
+    */
+    @Override
+    public boolean isApplicable(){
+        return true;
+    }
 }

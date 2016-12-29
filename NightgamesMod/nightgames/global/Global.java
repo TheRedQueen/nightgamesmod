@@ -599,16 +599,15 @@ public class Global {
     public static void buildModifierPool() {
         modifierPool = new HashSet<>();
         modifierPool.add(new NoModifier());
-        modifierPool.add(new NoItemsModifier());
-        modifierPool.add(new NoToysModifier());
-        modifierPool.add(new NoRecoveryModifier());
-        modifierPool.add(new NudistModifier());
-        modifierPool.add(new PacifistModifier());
-        modifierPool.add(new UnderwearOnlyModifier());
-        modifierPool.add(new VibrationModifier());
-        modifierPool.add(new VulnerableModifier());
-
-        File customModFile = new File("data/customModifiers.json");
+        //modifierPool.add(new NoItemsModifier());
+        //modifierPool.add(new NoToysModifier());
+        //modifierPool.add(new NoRecoveryModifier());
+        //modifierPool.add(new NudistModifier());
+        //modifierPool.add(new PacifistModifier());
+        //modifierPool.add(new UnderwearOnlyModifier());
+        //modifierPool.add(new VibrationModifier());
+        //modifierPool.add(new VulnerableModifier());
+        File customModFile = new File("data/modifiers.json");
         if (customModFile.canRead()) {
             try {
                 JsonArray array = JsonUtils.rootJson(Files.newBufferedReader(customModFile.toPath())).getAsJsonArray();
@@ -621,10 +620,11 @@ public class Global {
                         continue;
                     }
                     Modifier mod = CustomModifierLoader.readModifier(object);
-                    if (!mod.name().equals("DEMO"))
+                    if (mod !=null){ //Removed the Demo mod as there's now documentation, caught nulls from disabled
                         modifierPool.add(mod);
-                    if (isDebugOn(DebugFlags.DEBUG_LOADING))
-                        System.out.println("Loaded custom modifier: " + mod.name());
+                        if (isDebugOn(DebugFlags.DEBUG_LOADING))//This should have been in the above if block
+                            System.out.println("Loaded custom modifier: " + mod.name());
+                    }
                 }
             } catch (IOException e) {
                 System.out.println("Error loading custom modifiers: " + e);

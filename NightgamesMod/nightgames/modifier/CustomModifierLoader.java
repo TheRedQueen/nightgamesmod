@@ -1,5 +1,6 @@
 package nightgames.modifier;
 
+import nightgames.modifier.requirements.ModifierRequirements;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,6 +24,7 @@ public final class CustomModifierLoader {
         String name = object.get("name").getAsString();
         String intro = object.get("intro").getAsString();
         String acceptance = object.get("acceptance").getAsString();
+        boolean enabled = object.get("enabled").getAsBoolean();//enable or disable modifiers
 
         ActionModifier action = JsonUtils.getOptionalArray(object, "action")
                         .map(array -> readModifiers(array, ActionModifier.combiner, ActionModifier.loader))
@@ -36,9 +38,13 @@ public final class CustomModifierLoader {
         ItemModifier item = JsonUtils.getOptionalArray(object, "item")
                         .map(array -> readModifiers(array, ItemModifier.combiner, ItemModifier.loader))
                         .orElse(ItemModifier.combiner.nullModifier());
-
-        return new BaseModifier(clothing, item, StatusModifier.combiner.nullModifier(), skill, action,
-                        BaseModifier.EMPTY_CONSUMER) {
+        ModifierRequirements reqs = JsonUtils.getOptionalArray(object, "requirement")
+                        .map(array -> readModifiers(array, ModifierRequirements.combiner, ModifierRequirements.loader))
+                        .orElse(ModifierRequirements.combiner.nullModifier());//requirements
+        
+        if (enabled){//Don't return disabled modifiers...
+            return new BaseModifier(clothing, item, StatusModifier.combiner.nullModifier(), skill, action,
+                        BaseModifier.EMPTY_CONSUMER, reqs) {
 
             @Override
             public int bonus() {
@@ -60,8 +66,12 @@ public final class CustomModifierLoader {
                 return acceptance;
             }
         };
+        }
+        else{
+            return null;//...return null instead, which is caught in an if block in Global.buildModifierPool()
+        }
     }
-
+    
     private static <T extends ModifierCategory<T>> T readModifierComponent(JsonObject object,
                     ModifierCategoryLoader<T> template) {
 

@@ -1,6 +1,7 @@
 package nightgames.global;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,13 +24,13 @@ public class Prematch implements Scene {
         Global.unflag(Flag.victory);
         List<KeyableButton> choice = new ArrayList<KeyableButton>();
         String message = "";
-        if (player.getLevel() < 5) {
+        if (player.getLevel() > 5) {//CHANGE ME BACK
             message += "You arrive at the student union a few minutes before the start of the match. "
                             + "You have enough time to check in and make idle chat with your opponents before "
                             + "you head to your assigned starting point and wait. At exactly 10:00, the match is on.";
             type = new NoModifier();
             choice.add(new SceneButton("Start The Match"));
-        } else if (!Global.checkFlag(Flag.metLilly)) {
+        } else if (Global.checkFlag(Flag.metLilly)) {//SHOULD BE NOT
             message += "You get to the student union a little earlier than usual. Cassie and Jewel are there already and you spend a few minutes talking with them while "
                             + "you wait for the other girls to show up. A few people are still rushing around making preparations, but it's not clear exactly what they're doing. "
                             + "Other than making sure there are enough spare clothes to change into, there shouldn't be too much setup required. Maybe they're responsible for "
@@ -90,7 +91,22 @@ public class Prematch implements Scene {
                 Global.flag(Flag.Airi);
             }
             type = offer(player);
-            message += type.intro();
+            
+            //Because of the requirements system, its possible to get to a situation
+            //where there are no possible modifiers.
+            //This is to catch that.
+            try{
+                message += type.intro();
+            }
+            catch (NullPointerException e){
+                type = new NoModifier();
+                message += type.intro();
+            }
+            catch (Throwable t){
+                System.out.println("Something's gone wrong! \n Here's a stack trace:");
+                t.printStackTrace(System.out);
+            }
+            
             if (type.name().equals("normal")) {
                 choice.add(new SceneButton("Start The Match"));
             } else {
@@ -104,9 +120,10 @@ public class Prematch implements Scene {
     }
 
     private Modifier offer(Player player) {
-        if (Global.random(10) > 4) {
+        if (Global.random(10) > 11) {//CHANGE ME BACK TO 4
             return new NoModifier();
         }
+        Global.buildModifierPool(); //rebuilds the modifiers so requirements are rechecked
         Set<Modifier> modifiers = new HashSet<>(Global.getModifierPool());
         modifiers.removeIf(mod -> !mod.isApplicable() || mod.name().equals("normal"));
         return Global.pickRandom(modifiers.toArray(new Modifier[] {}));

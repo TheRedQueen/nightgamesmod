@@ -1,0 +1,47 @@
+[
+    {
+	"name":"No Fucking",
+	"bonus":75,
+	"enabled":true,
+	"intro":"<i>'Men...Or just anyone with a dick really.  Always trying to stick it in people... You aren't like that, are you? Think you can go a full night without fucking one of our mutual friends? Of course, if THEY do it, that's another story.'</i>",
+	"acceptance":"<i>Great! I'll let the girls know their pussies are safe tonight. Well, as safe as they want them to be, anyway.</i>",
+	"skill": [
+            {
+		"type":"ban-tactic",
+		"value": {
+                    "tactic": "fucking"
+		}
+            }
+        ],
+	"requirement": 	[
+            {
+		"type":"needs-bodypart",
+		"value": {
+                    "part": "cock"
+                }
+            }
+        ]
+    },{
+        "name":"Date Test",
+        "bonus":75,
+        "enabled": false,
+        "intro":"<i>Lets see if the date thing works</i>",
+        "acceptance":"<i>Looking good so far</i>",
+        "skill": [
+            {
+                "type":"ban-tactic",
+                "value": {
+                    "tactic": "stripping"
+                }
+            }
+        ],
+        "requirement": [
+            {
+                "type": "on-day",
+                "value": {
+                    "day": 1
+                }
+            }
+        ]
+    }
+]

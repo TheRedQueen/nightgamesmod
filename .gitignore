@@ -15,3 +15,5 @@ NightgamesMod/.settings
 combatlogs
 **/Thumbs.db
 **/.DS_Store
+/nbproject/private/
+/dist/
